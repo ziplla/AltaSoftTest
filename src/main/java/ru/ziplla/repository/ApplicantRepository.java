@@ -5,5 +5,5 @@ import org.springframework.stereotype.Repository;
 import ru.ziplla.entity.Applicant;
 
 @Repository
-public interface ApplicantRepository extends JpaRepository<Applicant, Integer> {
+public interface ApplicantRepository extends JpaRepository<Applicant, Long> {
 }
