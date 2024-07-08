@@ -5,15 +5,11 @@ import ru.ziplla.entity.Applicant;
 import ru.ziplla.entity.Vacancy;
 
 import java.time.ZonedDateTime;
-import java.util.Date;
 
 @Data
 public class EmailMessage {
 
     String applicantName;
-//    String applicantEmail;
-//    String applicantPositionOfInterest;
-//    String applicantCity;
     String vacancyPost;
     String vacancyName;
     String vacancyDescription;
@@ -36,29 +32,5 @@ public class EmailMessage {
         emailMessage.setEmailMessageDate(ZonedDateTime.now());
 
         return emailMessage;
-
-//        emailMessage.applicantName = applicant.getName();
-////        emailMessage.applicantEmail = applicant.getEmail();
-////        emailMessage.applicantPositionOfInterest = applicant.getPositionOfInterest();
-////        emailMessage.applicantCity = applicant.getCity();
-//        emailMessage.vacancyPost = vacancy.getPost();
-//        emailMessage.vacancyName = vacancy.getName();
-//        emailMessage.vacancyDescription = vacancy.getDescription();
-//        emailMessage.vacancySalaryLevel = vacancy.getSalaryLevel().toString();
-//        emailMessage.vacancyRequiredWorkExperience = vacancy.getRequiredWorkExperience().toString();
-//        emailMessage.vacancyCity = vacancy.getCity();
-//        emailMessage.emailMessageDate = ZonedDateTime.now();
-
-//        String emailMessageTemplate = "Здравствуйте,  " + emailMessage.applicantName + "!\n" +
-//                "Информируем вас о новой вакансии на должность" + emailMessage.vacancyPost + ".\n" +
-//                "Наименование: " + emailMessage.vacancyName + "\n" +
-//                "Описание: " + emailMessage.vacancyDescription + "\n" +
-//                "Уровень зарплаты: " + emailMessage.vacancySalaryLevel + "\n" +
-//                "Требуемый опыт работы: " + emailMessage.vacancyRequiredWorkExperience + "\n" +
-//                "С уважением,\n" +
-//                "Цифровое Будущее\n" +
-//                "«дата»";
-//
-//        return emailMessageTemplate;
     }
 }

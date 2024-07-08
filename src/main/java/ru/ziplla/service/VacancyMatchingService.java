@@ -43,34 +43,4 @@ public class VacancyMatchingService {
         return matchedApplicants;
     }
 
-    public Map<String, String> buildEmailMessagesTemplates(Map<Applicant, Vacancy> matchedApplicants) {
-
-        Map<String, String> buildedEmailMessages = new HashMap<>();
-        for (Map.Entry<Applicant, Vacancy> entry : matchedApplicants.entrySet()) {
-            Applicant applicant = entry.getKey();
-            Vacancy vacancy = entry.getValue();
-
-            System.out.println(applicant);
-            System.out.println(vacancy);
-
-            EmailMessage emailMessage = buildEmailMessageModel(applicant, vacancy);
-
-            System.out.println(emailMessage);
-
-            String applicantEmail = applicant.getEmail();
-            String emailText = "Здравствуйте,  " + emailMessage.getApplicantName() + "!\n" +
-                    "Информируем вас о новой вакансии на должность: " + emailMessage.getVacancyPost() + ".\n" +
-                    "Наименование: " + emailMessage.getVacancyName() + "\n" +
-                    "Описание: " + emailMessage.getVacancyDescription() + "\n" +
-                    "Уровень зарплаты: " + emailMessage.getVacancySalaryLevel() + "\n" +
-                    "Требуемый опыт работы: " + emailMessage.getVacancyRequiredWorkExperience() + "\n" +
-                    "С уважением,\n" +
-                    "Цифровое Будущее\n" +
-                    emailMessage.getEmailMessageDate().toString() + "\n";
-
-            buildedEmailMessages.put(applicantEmail, emailText);
-        }
-        System.out.println(buildedEmailMessages);
-        return buildedEmailMessages;
-    }
 }

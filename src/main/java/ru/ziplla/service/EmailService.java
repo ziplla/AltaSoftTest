@@ -3,12 +3,16 @@ package ru.ziplla.service;
 import org.apache.camel.ProducerTemplate;
 import org.apache.camel.component.mail.JavaMailSender;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 import ru.ziplla.entity.Applicant;
 import ru.ziplla.entity.Vacancy;
+import ru.ziplla.model.EmailMessage;
 
 import java.util.HashMap;
 import java.util.Map;
+
+import static ru.ziplla.model.EmailMessage.buildEmailMessageModel;
 
 @Service
 public class EmailService {
@@ -19,64 +23,52 @@ public class EmailService {
     @Autowired
     private VacancyMatchingService vacancyMatchingService;
 
-    // 0. метод запускается раз в сутки
-    // 1. перебрать вакансии и соискателей
-    // 2. отдельный мап с ними
-    // 3. берем из мапа соискателя
-    // 4. берем от соискателя вакансию
-    // 5. берем почту и имя от соискателя
-    // 6. берем все данные вакансии
-    // 7. составляем письмо
-    // 8. отправляем письмо
+    @Scheduled(cron = "0 0 0 * * ?")
+    public void sendEmail() {
 
-//    public void sendEmail() {
-//        Map<Applicant, Vacancy> matchVacancy = vacancyMatchingService.matchVacancy();
-//
-//        Map<String, String> buildedEmailMessages = vacancyMatchingService.buildEmailMessagesTemplates(matchVacancy);
-//
-//        for (Map.Entry<String, String> entry : buildedEmailMessages.entrySet()) {
-//            producerTemplate.sendBody(entry.getKey(), entry.getValue());
-//        }
-//
-////        producerTemplate.sendBody("direct:sendEmail", null);
-//    }
+        Map<Applicant, Vacancy> matchVacancy = vacancyMatchingService.matchVacancy();
 
-//    public void sendEmail() {
-//
-//        Map<Applicant, Vacancy> matchVacancy = vacancyMatchingService.matchVacancy();
-//
-//        Map<String, String> buildedEmailMessages = vacancyMatchingService.buildEmailMessagesTemplates(matchVacancy);
-//
-//        Map<String, String> additionalHeaders = new HashMap<>();
-//
-//        for (Map.Entry<String, String> entry : buildedEmailMessages.entrySet()) {
-//            additionalHeaders.put("to", entry.getKey());
-//            additionalHeaders.put("from", "pzajtsev.01@gmail.com"); // Установите адрес отправителя
-//            additionalHeaders.put("subject", "Test Email"); // Вы можете изменить тему при необходимости
-//            additionalHeaders.put("body", entry.getValue());
-//
-//            // Отправка сообщения через Camel Route
-//            producerTemplate.sendBodyAndHeaders("direct:sendEmail", null);
-//        }
-//
-//        // Установка заголовков для email
-//    }
-public void sendEmail() {
+        Map<String, String> buildedEmailMessages = buildEmailMessagesTemplates(matchVacancy);
 
-    Map<Applicant, Vacancy> matchVacancy = vacancyMatchingService.matchVacancy();
+        for (Map.Entry<String, String> entry : buildedEmailMessages.entrySet()) {
+            Map<String, Object> additionalHeaders = new HashMap<>();
+            additionalHeaders.put("to", entry.getKey());
+            additionalHeaders.put("from", "pzajtsev.01@gmail.com");
+            additionalHeaders.put("subject", "Новая вакансия");
+            additionalHeaders.put("body", entry.getValue());
 
-    Map<String, String> buildedEmailMessages = vacancyMatchingService.buildEmailMessagesTemplates(matchVacancy);
-
-    for (Map.Entry<String, String> entry : buildedEmailMessages.entrySet()) {
-        Map<String, Object> additionalHeaders = new HashMap<>();
-        additionalHeaders.put("to", entry.getKey());
-        additionalHeaders.put("from", "pzajtsev.01@gmail.com"); // Установите адрес отправителя
-        additionalHeaders.put("subject", "Test Email"); // Вы можете изменить тему при необходимости
-        additionalHeaders.put("body", entry.getValue());
-
-        // Отправка сообщения через Camel Route
-        producerTemplate.sendBodyAndHeaders("direct:sendEmail", null, additionalHeaders);
+            producerTemplate.sendBodyAndHeaders("direct:sendEmail", null, additionalHeaders);
+        }
     }
-}
 
+    public Map<String, String> buildEmailMessagesTemplates(Map<Applicant, Vacancy> matchedApplicants) {
+
+        Map<String, String> buildedEmailMessages = new HashMap<>();
+        for (Map.Entry<Applicant, Vacancy> entry : matchedApplicants.entrySet()) {
+            Applicant applicant = entry.getKey();
+            Vacancy vacancy = entry.getValue();
+
+            System.out.println(applicant);
+            System.out.println(vacancy);
+
+            EmailMessage emailMessage = buildEmailMessageModel(applicant, vacancy);
+
+            System.out.println(emailMessage);
+
+            String applicantEmail = applicant.getEmail();
+            String emailText = "Здравствуйте,  " + emailMessage.getApplicantName() + "!\n" +
+                    "Информируем вас о новой вакансии на должность: " + emailMessage.getVacancyPost() + ".\n" +
+                    "Наименование: " + emailMessage.getVacancyName() + "\n" +
+                    "Описание: " + emailMessage.getVacancyDescription() + "\n" +
+                    "Уровень зарплаты: " + emailMessage.getVacancySalaryLevel() + "\n" +
+                    "Требуемый опыт работы: " + emailMessage.getVacancyRequiredWorkExperience() + "\n" +
+                    "С уважением,\n" +
+                    "Цифровое Будущее\n" +
+                    emailMessage.getEmailMessageDate().toString() + "\n";
+
+            buildedEmailMessages.put(applicantEmail, emailText);
+        }
+        System.out.println(buildedEmailMessages);
+        return buildedEmailMessages;
+    }
 }
