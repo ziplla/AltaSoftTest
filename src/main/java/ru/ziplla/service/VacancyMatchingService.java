@@ -4,16 +4,13 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import ru.ziplla.entity.Applicant;
 import ru.ziplla.entity.Vacancy;
-import ru.ziplla.model.EmailMessage;
+
 import ru.ziplla.repository.ApplicantRepository;
 import ru.ziplla.repository.VacancyRepository;
 
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-
-import static ru.ziplla.model.EmailMessage.buildEmailMessageModel;
 
 @Service
 public class VacancyMatchingService {
