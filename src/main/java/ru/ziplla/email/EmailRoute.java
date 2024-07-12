@@ -6,6 +6,13 @@ import org.springframework.stereotype.Component;
 @Component
 public class EmailRoute extends RouteBuilder {
 
+    /**
+     * Configures the Camel route for sending email messages.
+     * This route listens on the "direct:sendEmail" endpoint, sets the necessary email headers,
+     * and sends the email using an SMTP server.
+     *
+     * @throws Exception if an error occurs during route configuration
+     */
     @Override
     public void configure() throws Exception {
         from("direct:sendEmail")

@@ -24,6 +24,11 @@ public class VacancyMatchingService {
     @Autowired
     private VacancyRepository vacancyRepository;
 
+    /**
+     * Matches applicants to vacancies based on their position of interest and city.
+     *
+     * @return Map containing matched applicants and their corresponding vacancies
+     */
     public Map<Applicant, Vacancy> matchVacancy() {
 
         List<Vacancy> allVacancies = vacancyRepository.findAll();
