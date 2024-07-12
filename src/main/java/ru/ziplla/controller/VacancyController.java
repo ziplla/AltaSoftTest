@@ -17,11 +17,28 @@ public class VacancyController {
     @Autowired
     private VacancyService vacancyService;
 
+    /**
+     * Saves a new vacancy.
+     *
+     * @param vacancy the vacancy to be saved
+     * @return the saved vacancy
+     */
     @PutMapping
     public Vacancy saveVacancy(@RequestBody Vacancy vacancy) {
         return vacancyService.saveVacancy(vacancy);
     }
 
+    /**
+     * Searches for vacancies based on provided criteria such as name, post, and city.
+     *
+     * @param name     the name of the vacancy to search for (optional)
+     * @param post     the post of the vacancy to search for (optional)
+     * @param city     the city of the vacancy to search for (optional)
+     * @param page     the page number to retrieve (default is 0)
+     * @param size     the number of vacancies per page (default is 10)
+     * @param sort     the sorting criteria in the format "property,order" (default is "id,asc")
+     * @return a list of vacancies that match the search criteria
+     */
     @GetMapping
     public List<Object> searchVacancies(@RequestParam(required = false) String name,
                                          @RequestParam(required = false) String post,

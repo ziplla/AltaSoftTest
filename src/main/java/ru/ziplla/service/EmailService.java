@@ -1,7 +1,6 @@
 package ru.ziplla.service;
 
 import org.apache.camel.ProducerTemplate;
-import org.apache.camel.component.mail.JavaMailSender;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
@@ -23,6 +22,10 @@ public class EmailService {
     @Autowired
     private VacancyMatchingService vacancyMatchingService;
 
+    /**
+     * Scheduled method that sends email notifications to matched applicants
+     * for vacancies. Runs daily at midnight.
+     */
     @Scheduled(cron = "0 0 0 * * ?")
     public void sendEmail() {
 
@@ -41,6 +44,12 @@ public class EmailService {
         }
     }
 
+    /**
+     * Builds email message templates based on matched applicants and vacancies.
+     *
+     * @param matchedApplicants Map of matched applicants and their corresponding vacancies
+     * @return Map containing applicant email as key and formatted email text as value
+     */
     public Map<String, String> buildEmailMessagesTemplates(Map<Applicant, Vacancy> matchedApplicants) {
 
         Map<String, String> buildedEmailMessages = new HashMap<>();

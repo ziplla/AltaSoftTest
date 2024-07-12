@@ -15,6 +15,12 @@ public class ApplicantController {
     @Autowired
     private ApplicantService applicantService;
 
+    /**
+     * Saves a new applicant.
+     *
+     * @param applicant the applicant to be saved
+     * @return the saved applicant
+     */
     @PutMapping
     public Applicant saveApplicant(@RequestBody Applicant applicant) {
         return applicantService.saveApplicant(applicant);

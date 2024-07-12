@@ -18,6 +18,13 @@ public class EmailMessage {
     String vacancyCity;
     ZonedDateTime emailMessageDate;
 
+    /**
+     * Builds an email message model based on the provided applicant and vacancy details.
+     *
+     * @param applicant the applicant to whom the email will be sent
+     * @param vacancy   the vacancy for which the email is being sent
+     * @return an {@code EmailMessage} object containing the details to be included in the email
+     */
     public static EmailMessage buildEmailMessageModel(Applicant applicant, Vacancy vacancy) {
 
         EmailMessage emailMessage = new EmailMessage();
